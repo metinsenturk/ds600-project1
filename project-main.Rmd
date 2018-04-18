@@ -1,0 +1,60 @@
+---
+title: "Project 1 - DS-600"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#lbraries required to run the document
+library(stringr)
+```
+
+## Introduction
+
+Every year, there are many forest fires occur worldwide. To protect the natural wildlife, numerous attempts has been made to prevent forests from getting fire. In this project, we will be outlining a summary in about a forest fire that occurred in a region at Portugal. The data is collected by using metheorological and other data. For more information about the dataset, this [link](http://www3.dsi.uminho.pt/pcortez/forestfires/forestfires-names.txt) can be followed.
+
+The following is the dataset information.
+
+```{r}
+# reading 
+forestfirest = read.csv('forestfires.csv')
+head(forestfirest)
+```
+
+## Data Cleaning
+
+With the dataset, we will first be investigating the variables' data type and general shape of occurance. We will be examining data in terms of the following objectives:
+
+1. Variable data types
+2. Empty or NA values
+
+Below, are presenting the general outline of the dataset.
+
+```{r}
+str(forestfirest)
+```
+
+We observed that FFMC variable has some missing values. Therefore, we decided to update values with replacing NAs with mean of it.
+
+```{r}
+#replacing empty data with 0
+#forestfirest$FFMC = str_replace(forestfirest$FFMC,"","0")
+
+# finding indices of na
+ind = which(is.na(forestfirest$FFMC))
+
+#replacing empty data with 0
+forestfirest$FFMC[ind]=0
+
+#replacing empty data with 0
+forestfirest$FFMC[ind]=mean(forestfirest$FFMC)
+```
+
+TODO:
+1. use dplyr and tidyr package.
+2. use a few functions in that packages
+3. lecture notes, find sth from that notes that we can use on our dataset
+
