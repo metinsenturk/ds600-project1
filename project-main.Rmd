@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #lbraries required to run the document
 library(stringr)
+library(dplyr)
 ```
 
 ## Introduction
@@ -20,8 +21,7 @@ The following is the dataset information.
 
 ```{r}
 # reading 
-forestfirest = read.csv('forestfires.csv')
-head(forestfirest)
+forestfires = read.csv('forestfires.csv')
 ```
 
 ## Data Cleaning
@@ -31,30 +31,43 @@ With the dataset, we will first be investigating the variables' data type and ge
 1. Variable data types
 2. Empty or NA values
 
-Below, are presenting the general outline of the dataset.
+Below, we are presenting the general outline of the dataset to understand the structure of our dataset. To use the some functions, we have to install the library "dplyr" first.
 
 ```{r}
-str(forestfirest)
+head(forestfires)
+class(forestfires)
+dim(forestfires)
+names(forestfires)
+glimpse(forestfires)
+summary(forestfires)
 ```
 
 We observed that FFMC variable has some missing values. Therefore, we decided to update values with replacing NAs with mean of it.
 
 ```{r}
-#replacing empty data with 0
-#forestfirest$FFMC = str_replace(forestfirest$FFMC,"","0")
-
 # finding indices of na
-ind = which(is.na(forestfirest$FFMC))
+ind = which(is.na(forestfires$FFMC))
 
 #replacing empty data with 0
-forestfirest$FFMC[ind]=0
+forestfires$FFMC[ind]=0
 
 #replacing empty data with 0
-forestfirest$FFMC[ind]=mean(forestfirest$FFMC)
+forestfires$FFMC[ind]=mean(forestfires$FFMC)
 ```
 
-TODO:
-1. use dplyr and tidyr package.
-2. use a few functions in that packages
-3. lecture notes, find sth from that notes that we can use on our dataset
+Now, we want to see how is the behavior of the weather through the time. Let's take a look what are the values of some variables, as temperature, humidity, wind and rain in the months of this year. Doing this, we can know more about the weather of this zone of Portugal.
+```{r}
+# making plots of temperature in Celsius, wind in km/h, rain in mm/m2, and humidty (RH) in % 
+plot(forestfires$temp, forestfires$month)
+plot(forestfires$wind, forestfires$month)
+plot(forestfires$rain, forestfires$month)
+plot(forestfires$RH, forestfires$month) 
+```
+
+Another way to see the variables is through the histograms. Let's see how is the behavior of some variables, as burned area of the forest.
+
+```{r}
+# making histogram of burned area of the forest
+hist(forestfires$area)
+```
 
