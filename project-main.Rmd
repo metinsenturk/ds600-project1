@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #lbraries required to run the document
 library(stringr)
+library(tidyr)
 library(dplyr)
 ```
 
@@ -69,5 +70,40 @@ Another way to see the variables is through the histograms. Let's see how is the
 ```{r}
 # making histogram of burned area of the forest
 hist(forestfires$area)
+```
+
+### Gathering the Information
+
+The data presents the events of fires in x, y spatial coordinates within the Montesinho map. Other columns represents the features of each observed variable. For the sake of analysis, we may need to do some operations within the data. The following will present some manipulation examples that may occur during data analysis.
+
+```{r}
+# unite coordinates
+forestfires_t1 <- unite(forestfires, "coordinates", c(X, Y))
+
+# changing data
+forestfires_t2 <- mutate(forestfires_t1, coordinates = paste("coor", coordinates, sep = "_"))
+
+# filtering the data with some parameters
+forestfires_t3 <- filter(forestfires_t2, month == "mar", day == "fri")
+
+# summarize all the columns with mean
+summarise_if(forestfires_t3, is.numeric, funs(round(mean(., na.rm = T), 2)))
+
+# doing multiple things at once
+forestfires %>% 
+  mutate(ISIandTemp = ISI * temp, rain = exp(rain), area = log(2)) %>% 
+  select(X:day,ISIandTemp, ISI, temp, area) %>%
+  arrange(desc(ISIandTemp)) %>%
+  filter(temp > 32)
+
+# grouping the data
+forestfires %>%
+  group_by(month) %>%
+  summarise(
+    n = n(),
+    RainTotal = sum(rain),
+    WindAverage = mean(wind),
+    areaTotal = sum(area)
+  )
 ```
 

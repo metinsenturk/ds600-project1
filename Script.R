@@ -1,4 +1,8 @@
+#libraries
+library(tidyr)
 
+vignette("tidy-data")
+?tidyr
 # reading 
 forestfirest = read.csv('forestfires.csv')
 View(forestfirest)
