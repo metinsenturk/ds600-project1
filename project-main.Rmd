@@ -1,8 +1,8 @@
 ---
 title: "Project 1 - DS-600"
 output:
-  html_document: default
   word_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -106,4 +106,8 @@ forestfires %>%
     areaTotal = sum(area)
   )
 ```
+
+## Concusion
+The data after cleaning operations is ready for statistical analysis. After operations of tidying, restructing and removing outliers, we will have the data that is ready for further analysis.
+
 
