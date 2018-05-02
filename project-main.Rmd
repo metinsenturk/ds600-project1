@@ -1,8 +1,9 @@
 ---
 title: "Project 1 - DS-600"
 output:
-  word_document: default
   html_document: default
+  pdf_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
