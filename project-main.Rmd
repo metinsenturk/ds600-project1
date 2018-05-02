@@ -108,9 +108,11 @@ forestfires %>%
     WindAverage = mean(wind),
     areaTotal = sum(area)
   )
+
+write.csv(forestfires, file = "foretfires_cleaned.csv")
 ```
 
-## Concusion
+## Conclusion
 The data after cleaning operations is ready for statistical analysis. After operations of tidying, restructing and removing outliers, we will have the data that is ready for further analysis.
 
 
