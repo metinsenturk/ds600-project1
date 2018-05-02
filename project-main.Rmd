@@ -57,6 +57,9 @@ forestfires$FFMC[ind]=0
 
 #replacing empty data with 0
 forestfires$FFMC[ind]=mean(forestfires$FFMC)
+
+# removing outliers
+forestfires <- filter(forestfires, area < 150)
 ```
 
 Now, we want to see how is the behavior of the weather through the time. Let's take a look what are the values of some variables, as temperature, humidity, wind and rain in the months of this year. Doing this, we can know more about the weather of this zone of Portugal.
@@ -108,6 +111,33 @@ forestfires %>%
     WindAverage = mean(wind),
     areaTotal = sum(area)
   )
+```
+
+### Using GGPlot
+```{r}
+ggplot(forestfires, aes(x=DMC)) + 
+  geom_histogram(aes(y = ..density..)) + 
+  geom_density(color = "red") + 
+  geom_rug()
+
+qqPlot(forestfires$DMC, main = "QQ plot", ylab = "")
+
+ggplot(forestfires, aes(x=DMC, y=sqrt(area))) +
+  geom_boxplot() + 
+  geom_rug() + 
+  geom_hline(aes(yintercept=mean(forestfires$DMC, na.rm = T)), linetype = 2, color = "red") +
+  scale_x_discrete(breaks = NULL)
+```
+
+### Correlation between features
+```{r}
+symnum(cor(forestfires[5:12], use = "complete.obs"))
+```
+
+### Linear Model
+```{r}
+fit <- lm(area ~ ., forestfires) 
+summary(fit)
 ```
 
 ## Concusion
