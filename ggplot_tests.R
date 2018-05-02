@@ -23,6 +23,7 @@ library(e1071)
 svm_model=svm(area~temp+RH+wind+rain,data=forestfires)
 summary(svm_model)
 
+
 preds = predict(svm_model, forestfires[-13])
 table(svm_model$fitted, Actual=forestfires$area)
 plot(svm_model$fitted, forestfires$area, col=c('red','blue'))
