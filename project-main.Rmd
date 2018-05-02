@@ -57,6 +57,9 @@ forestfires$FFMC[ind]=0
 
 #replacing empty data with 0
 forestfires$FFMC[ind]=mean(forestfires$FFMC)
+
+# removing outliers
+forestfires <- filter(forestfires, area < 150)
 ```
 
 Now, we want to see how is the behavior of the weather through the time. Let's take a look what are the values of some variables, as temperature, humidity, wind and rain in the months of this year. Doing this, we can know more about the weather of this zone of Portugal.
