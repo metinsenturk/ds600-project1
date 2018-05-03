@@ -1,9 +1,9 @@
 ---
-title: "Project 1 - DS-600"
+title: "Project 2 - DS-600"
 output:
-  html_document: default
-  pdf_document: default
   word_document: default
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -159,13 +159,6 @@ plot1 = function(x) {plot(x,xlab="")
   abline(h=mean(x,na.rm=T),lty=1)
   abline(h=mean(x,na.rm=T)+sd(x,na.rm=T),lty=2)
   abline(h=median(x,na.rm=T),lty=3)}
-=======
-
-plot1(forestfires$rain)
-```
-
-## Concusion
-The data after cleaning operations is ready for statistical analysis. After operations of tidying, restructing and removing outliers, we will have the data that is ready for further analysis.
 
 plot1(forestfires$rain)
 ```
