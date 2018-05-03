@@ -15,6 +15,8 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(car)
+library(corrplot)
+library(DMwR2)
 ```
 
 ## Introduction
@@ -114,6 +116,7 @@ forestfires %>%
 ```
 
 ### Using GGPlot
+
 ```{r}
 ggplot(forestfires, aes(x=DMC)) + 
   geom_histogram(aes(y = ..density..)) + 
@@ -122,22 +125,42 @@ ggplot(forestfires, aes(x=DMC)) +
 
 qqPlot(forestfires$DMC, main = "QQ plot", ylab = "")
 
-ggplot(forestfires, aes(x=DMC, y=sqrt(area))) +
+ggplot(forestfires, aes(x=ISI, y=sqrt(area))) +
   geom_boxplot() + 
   geom_rug() + 
-  geom_hline(aes(yintercept=mean(forestfires$DMC, na.rm = T)), linetype = 2, color = "red") +
+  geom_hline(aes(yintercept=mean(forestfires$ISI, na.rm = T)), linetype = 2, color = "red") +
   scale_x_discrete(breaks = NULL)
 ```
 
 ### Correlation between features
+
 ```{r}
 symnum(cor(forestfires[5:12], use = "complete.obs"))
+```
+
+### Correlation Plot
+
+```{r}
+cm <- cor(forestfires[,5:12], use="complete.obs")
+corrplot(cm, type="upper", tl.pose="d")
+corrplot(cm,add=TRUE, type="lower", method="number",diag=FALSE, tl.pos="n", cl.pos="n")
 ```
 
 ### Linear Model
 ```{r}
 fit <- lm(area ~ ., forestfires) 
 summary(fit)
+```
+
+### Distribution of the Values of Columns
+
+```{r}
+plot1 = function(x) {plot(x,xlab="")
+  abline(h=mean(x,na.rm=T),lty=1)
+  abline(h=mean(x,na.rm=T)+sd(x,na.rm=T),lty=2)
+  abline(h=median(x,na.rm=T),lty=3)}
+
+plot1(forestfires$rain)
 ```
 
 ## Concusion
