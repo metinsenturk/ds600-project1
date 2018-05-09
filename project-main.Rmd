@@ -1,9 +1,9 @@
 ---
 title: "Project 2 - DS-600"
 output:
-  word_document: default
-  pdf_document: default
   html_document: default
+  pdf_document: default
+  word_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -148,8 +148,10 @@ corrplot(cm,add=TRUE, type="lower", method="number",diag=FALSE, tl.pos="n", cl.p
 
 ### Linear Model
 ```{r}
-fit <- lm(area ~ ., forestfires) 
-summary(fit)
+fit.m0 <- lm(area ~ ., forestfires)
+fit.m1 <- lm(area ~ day + DMC + temp + RH, forestfires)
+fit.m2 <- lm(area ~ month + day + DC + temp, forestfires)
+summary(fit.m2)
 ```
 
 ### Distribution of the Values of Columns
@@ -161,6 +163,28 @@ plot1 = function(x) {plot(x,xlab="")
   abline(h=median(x,na.rm=T),lty=3)}
 
 plot1(forestfires$rain)
+```
+
+### Anova Analysis
+
+After fitting a linear model, to understand model's success, we do anova analysis to the model's variance.
+
+```{r}
+anova(fit.m2)
+```
+
+To find the best model within two models, we are planing to do anova analysis to both models. The result of analysis on variances will indicate which model will better in terms of variance.
+
+```{r}
+anova(fit.m1, fit.m2)
+```
+
+Here, we see that applying each model an anova analysis will take more computational time. Therefore, we will be using STEP function in order to find the best model. Below, we are presenting that we are improving the model with an AIC score of 2776.82 to 2759.06. our final model in below function indicates that the following is the best model that we should use, in order to predict area.
+
+  * formula = area ~ ISI + temp + wind
+
+```{r}
+step(fit.m0, trace = F)
 ```
 
 ## Conclusion
