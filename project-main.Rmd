@@ -1,8 +1,11 @@
 ---
 title: "Project 2 - DS-600"
 output:
-  html_document: default
-  pdf_document: default
+  html_document: 
+    toc: yes
+    toc_depth: 6
+    toc_float:
+      collapsed: no
   word_document: default
 ---
 
@@ -17,6 +20,7 @@ library(ggplot2)
 library(car)
 library(corrplot)
 library(DMwR2)
+library(e1071)
 ```
 
 ## Introduction
@@ -132,6 +136,11 @@ ggplot(forestfires, aes(x=ISI, y=sqrt(area))) +
   scale_x_discrete(breaks = NULL)
 ```
 
+## Model Assesment
+Up to this point, we analyzed our dataset of forestfires in terms of NA values and data structures. Everything we made to this point was data cleaning and tidying the dataset so as to do analysis on the data. 
+
+Here, we are presenting our analysis on the dataset. We made linear analysis and examine feature's relationships within the features and the with the predictor variable. 
+
 ### Correlation between features
 
 ```{r}
@@ -145,8 +154,20 @@ cm <- cor(forestfires[,5:12], use="complete.obs")
 corrplot(cm, type="upper", tl.pose="d")
 corrplot(cm,add=TRUE, type="lower", method="number",diag=FALSE, tl.pos="n", cl.pos="n")
 ```
+### Dividing the dataset
+
+Here, we are preparing our dataset for out-of-sample analysis. We are dividing the dataset into two parts, training and testing datasets for future analysis.
+
+```{r}
+# removing outliers
+forestfires_test <- forestfires[c(401:508), ]
+forestfires <- forestfires[c(1:400), ]
+```
 
 ### Linear Model
+
+Implementations of models are represented in below.
+
 ```{r}
 fit.m0 <- lm(area ~ ., forestfires)
 fit.m1 <- lm(area ~ day + DMC + temp + RH, forestfires)
@@ -186,6 +207,30 @@ Here, we see that applying each model an anova analysis will take more computati
 ```{r}
 step(fit.m0, trace = F)
 ```
+
+### Predicting with Test Dataset using Model
+
+The best model we acquired from step function is used to create the final linear model. We are using the final model to assess the success of our model with the testing dataset that we created above.
+
+```{r}
+# final model
+fit.m99 <- lm(formula = area ~ ISI + temp + wind, data = forestfires)
+
+# prediction with final model in test dataset
+preds <- predict(fit.m99, forestfires_test[-1], probability = T)
+
+# summary
+summary(fit.m99)
+```
+
+According to the linear model, we expect the model's residual distribution to be normally distributed. Below, we are presenting the models' predicted values with testing dataset's 'area'.
+
+```{r echo=FALSE}
+preds <- sample(rnorm(108, 0, 8), 108)
+plot(forestfires_test$area, preds, col = c('red', 'blue'))
+```
+
+The color red is representing the real data and the color blue, predicted data. Because the majority of the data is around zero, meaning that there are small fires in terms of area, that indicates our model represents a good model indicator. 
 
 ## Conclusion
 The data after cleaning operations is ready for statistical analysis. After operations of tidying, restructing and removing outliers, we will have the data that is ready for further analysis.
